@@ -8,13 +8,13 @@ DROP DATABASE IF EXISTS uvv;
 DROP SCHEMA IF EXISTS lojas;
 
 
--- Apagando usuário caso exista
+-- Apagando usuario caso exista
 DROP ROLE IF EXISTS daniele;
 DROP USER IF EXISTS daniele;
 
 
 
--- Criando usuário e uma senha para ele
+-- Criando usuario e uma senha para ele
 
 CREATE USER daniele WITH 
 CREATEDB
@@ -31,7 +31,7 @@ LC_COLLATE 'pt_BR.UTF-8'
 LC_CTYPE 'pt_BR.UTF-8'
 ALLOW_CONNECTIONS true;
 
---Trocando conexão e inserindo a senha;
+-- Trocando conexao e inserindo a senha;
 
 \c 'dbname=uvv user=daniele password=computacao@raiz';
 
@@ -44,7 +44,7 @@ CREATE SCHEMA lojas AUTHORIZATION daniele;
 
 
 
-
+-- Ajustando SEARCH PATH
 ALTER USER daniele SET SEARCH_PATH TO lojas, "$user", public;
 
 SET SEARCH_PATH TO lojas, "$user", public;
@@ -58,7 +58,7 @@ SET SEARCH_PATH TO lojas, "$user", public;
 
 
 
---Criando as tabelas
+-- Criando as tabelas
 CREATE TABLE produtos (
                 produto_id       NUMERIC(38)   NOT NULL,
                 nome             VARCHAR(255)  NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE produtos (
 COMMENT ON TABLE  produtos                  IS 'Dados dos produtos';
 COMMENT ON COLUMN produtos.produto_id       IS 'Insira o ID do produto';
 COMMENT ON COLUMN produtos.nome             IS 'Insira o nome dos produtos';
-COMMENT ON COLUMN produtos.preco_unitario   IS 'Insira o preço da unidade dos produtos';
+COMMENT ON COLUMN produtos.preco_unitario   IS 'Insira o preco da unidade dos produtos';
 COMMENT ON COLUMN produtos.detalhes         IS 'Insira detalhes dos produtos';
 COMMENT ON COLUMN produtos.imagem           IS 'Insira a imagem dos produtos';
 COMMENT ON COLUMN produtos.imagem_mime_type IS 'Insira o MIME type da imagem dos produtos';
@@ -104,8 +104,8 @@ CREATE TABLE pedidos_itens (
 );
 COMMENT ON COLUMN pedidos_itens.pedido_id       IS 'Insira o ID do pedido';
 COMMENT ON COLUMN pedidos_itens.produto_id      IS 'Insira o ID do produto';
-COMMENT ON COLUMN pedidos_itens.numero_da_linha IS 'Insira o número da linha';
-COMMENT ON COLUMN pedidos_itens.preco_unitario  IS 'Insira o preço da unidade de um item de um pedido';
+COMMENT ON COLUMN pedidos_itens.numero_da_linha IS 'Insira o numero da linha';
+COMMENT ON COLUMN pedidos_itens.preco_unitario  IS 'Insira o preco da unidade de um item de um pedido';
 COMMENT ON COLUMN pedidos_itens.quantidade      IS 'Insira a quantidade de itens em um pedido';
 COMMENT ON COLUMN pedidos_itens.envio_id        IS 'Insira o ID do envio';
 
@@ -142,7 +142,7 @@ COMMENT ON TABLE  envios                  IS 'Dados dos envios';
 COMMENT ON COLUMN envios.envio_id         IS 'Insira o ID do envio';
 COMMENT ON COLUMN envios.loja_id          IS 'Inaira o ID da loja que enviou um pedido';
 COMMENT ON COLUMN envios.cliente_id       IS 'insira o ID do cliente';
-COMMENT ON COLUMN envios.endereco_entrega IS 'Insira o endereço de entrega';
+COMMENT ON COLUMN envios.endereco_entrega IS 'Insira o endereco de entrega';
 COMMENT ON COLUMN envios.status           IS 'Insira o status do envio';
 
 
@@ -165,15 +165,15 @@ CREATE TABLE lojas (
 COMMENT ON TABLE  lojas                         IS 'Dados das lojas';
 COMMENT ON COLUMN lojas.loja_id                 IS 'Insira do ID da loja';
 COMMENT ON COLUMN lojas.nome                    IS 'Insira o nome da loja';
-COMMENT ON COLUMN lojas.endereco_web            IS 'Insira o endereço web da loja';
-COMMENT ON COLUMN lojas.endereco_fisico         IS 'Insira o endereço físico da loja';
+COMMENT ON COLUMN lojas.endereco_web            IS 'Insira o endereco web da loja';
+COMMENT ON COLUMN lojas.endereco_fisico         IS 'Insira o endereco fisico da loja';
 COMMENT ON COLUMN lojas.latitude                IS 'Insira a latitude da loja';
 COMMENT ON COLUMN lojas.longitude               IS 'Insira a longitude da loja';
 COMMENT ON COLUMN lojas.logo                    IS 'Insira a logo da loja';
 COMMENT ON COLUMN lojas.logo_mime_type          IS 'Insira o MIME type da logo da loja';
 COMMENT ON COLUMN lojas.logo_arquivo            IS 'Insira o arquivo da logo da loja';
 COMMENT ON COLUMN lojas.logo_charset            IS 'Insira o charset da logo da loja';
-COMMENT ON COLUMN lojas.logo_ultima_atualizacao IS 'Insira a ultima atualização da logo da loja';
+COMMENT ON COLUMN lojas.logo_ultima_atualizacao IS 'Insira a ultima atualizacao da logo da loja';
 COMMENT ON COLUMN lojas.envio_id                IS 'Insira o ID do envio';
 COMMENT ON COLUMN lojas.pedido_id               IS 'Insira o ID do pedido';
 
@@ -183,7 +183,7 @@ CREATE TABLE estoques (
                 loja_id             NUMERIC(38) NOT NULL,
                 produto_id          NUMERIC     NOT NULL,
                 quantidade          NUMERIC(38) NOT NULL,
-                produtos_produto_id NUMERIC(38) NOT NULL,
+                produto_id          NUMERIC(38) NOT NULL,
                 CONSTRAINT estoque_id PRIMARY KEY (estoque_id)
 );
 COMMENT ON TABLE  estoques                     IS 'Dados dos estoques';
@@ -191,7 +191,7 @@ COMMENT ON COLUMN estoques.estoque_id          IS 'Insira o ID do estoque';
 COMMENT ON COLUMN estoques.loja_id             IS 'Insira o ID da loja';
 COMMENT ON COLUMN estoques.produto_id          IS 'Insira o ID do produto';
 COMMENT ON COLUMN estoques.quantidade          IS 'Insira a quantidade existente do produto no estoque';
-COMMENT ON COLUMN estoques.produtos_produto_id IS 'Insira o ID do produto';
+COMMENT ON COLUMN estoques.produto_id          IS 'Insira o ID do produto';
 
 
 --Adicionando CONSTRAINTS
@@ -218,7 +218,7 @@ CHECK (preco_unitario>0);
 
 
 ALTER TABLE estoques ADD CONSTRAINT produtos_estoques_fk
-FOREIGN KEY (produtos_produto_id)
+FOREIGN KEY (produto_id)
 REFERENCES produtos (produto_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
@@ -231,14 +231,14 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE pedidos_itens ADD CONSTRAINT produtos_pedidos_itens_fk
+ALTER TABLE pedidos_itens ADD CONSTRAINT pedidos_itens_fk
 FOREIGN KEY (produto_id)
 REFERENCES produtos (produto_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE pedidos_itens ADD CONSTRAINT pedidos_pedidos_itens_fk
+ALTER TABLE pedidos_itens ADD CONSTRAINT pedidos_itens_fk
 FOREIGN KEY (pedido_id)
 REFERENCES pedidos (pedido_id)
 ON DELETE NO ACTION
