@@ -96,7 +96,6 @@ CREATE TABLE estoques (
 
 
 -- Adicionando CONSTRAINTS
-
 ALTER TABLE lojas ADD CONSTRAINT enderecos
 CHECK ((endereco_web IS NOT NULL AND endereco_fisico IS NULL) OR (endereco_web IS NULL AND endereco_fisico IS NOT NULL));
 
