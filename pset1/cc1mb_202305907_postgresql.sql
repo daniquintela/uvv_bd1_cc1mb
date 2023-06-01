@@ -183,7 +183,6 @@ CREATE TABLE estoques (
                 loja_id             NUMERIC(38) NOT NULL,
                 produto_id          NUMERIC     NOT NULL,
                 quantidade          NUMERIC(38) NOT NULL,
-                produto_id          NUMERIC(38) NOT NULL,
                 CONSTRAINT estoque_id PRIMARY KEY (estoque_id)
 );
 COMMENT ON TABLE  estoques                     IS 'Dados dos estoques';
@@ -191,8 +190,6 @@ COMMENT ON COLUMN estoques.estoque_id          IS 'Insira o ID do estoque';
 COMMENT ON COLUMN estoques.loja_id             IS 'Insira o ID da loja';
 COMMENT ON COLUMN estoques.produto_id          IS 'Insira o ID do produto';
 COMMENT ON COLUMN estoques.quantidade          IS 'Insira a quantidade existente do produto no estoque';
-COMMENT ON COLUMN estoques.produto_id          IS 'Insira o ID do produto';
-
 
 --Adicionando CONSTRAINTS
 ALTER TABLE lojas
@@ -225,20 +222,6 @@ ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE clientes ADD CONSTRAINT pedidos_clientes_fk
-FOREIGN KEY (pedido_id)
-REFERENCES pedidos (pedido_id)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
-ALTER TABLE pedidos_itens ADD CONSTRAINT pedidos_itens_fk
-FOREIGN KEY (produto_id)
-REFERENCES produtos (produto_id)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
-ALTER TABLE pedidos_itens ADD CONSTRAINT pedidos_itens_fk
 FOREIGN KEY (pedido_id)
 REFERENCES pedidos (pedido_id)
 ON DELETE NO ACTION
