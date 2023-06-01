@@ -9,7 +9,6 @@ DROP USER IF EXISTS daniele;
 
 -- Criando usuario e uma senha para ele
 CREATE USER 'daniele' IDENTIFIED BY 'computacao@raiz';
-GRANT CREATEDB, LOGIN ON *.* TO 'daniele';
 
 -- Criando banco de dados
 CREATE DATABASE uvv;
@@ -17,9 +16,6 @@ USE uvv;
 
 -- Criando SCHEMA
 CREATE SCHEMA lojas;
-
--- Ajustando SEARCH PATH
-ALTER USER 'daniele' DEFAULT ROLE lojas;
 
 -- Criando as tabelas
 CREATE TABLE produtos (
@@ -92,8 +88,9 @@ CREATE TABLE estoques (
                 estoque_id          DECIMAL(38) NOT NULL,
                 loja_id             DECIMAL(38) NOT NULL,
                 produto_id          DECIMAL     NOT NULL,
-                quantidade          DECIMAL
-
+                quantidade          DECIMAL,
+                PRIMARY KEY (estoque_id)
+);
 
 -- Adicionando CONSTRAINTS
 ALTER TABLE lojas ADD CONSTRAINT enderecos
@@ -120,18 +117,6 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION;
 
 ALTER TABLE clientes ADD CONSTRAINT pedidos_clientes_fk
-FOREIGN KEY (pedido_id)
-REFERENCES pedidos (pedido_id)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION;
-
-ALTER TABLE pedidos_itens ADD CONSTRAINT pedidos_itens_produto_fk
-FOREIGN KEY (produto_id)
-REFERENCES produtos (produto_id)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION;
-
-ALTER TABLE pedidos_itens ADD CONSTRAINT pedidos_itens_pedido_fk
 FOREIGN KEY (pedido_id)
 REFERENCES pedidos (pedido_id)
 ON DELETE NO ACTION
